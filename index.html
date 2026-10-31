@@ -1,285 +1,99 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>বাগি রাশ</title>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;700&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-html,body{margin:0;height:100%;overflow:hidden;background:#2a1d14;color:#fff3d6;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;touch-action:none}
-.hide{display:none!important}
-canvas{position:fixed;inset:0;width:100%;height:100%}
-#lobby{position:fixed;inset:0;overflow:auto;padding:max(20px,env(safe-area-inset-top)) 20px 24px;display:flex;flex-direction:column;gap:14px;max-width:460px;margin:auto;touch-action:pan-y}
-h1{margin:6px 0 0;font-size:44px;line-height:1;color:#ff8a24;text-shadow:0 4px 0 #6b2d05;transform:rotate(-2deg)}
-h2{margin:0;font-size:15px;color:#f2d9a0;font-weight:500}
-input{font:inherit;font-size:18px;padding:12px 14px;border-radius:14px;border:3px solid #6b4a2b;background:#3c2a1d;color:#fff3d6;width:100%;user-select:text;-webkit-user-select:text}
-button{font:inherit;font-weight:700;font-size:18px;padding:13px 16px;border:0;border-radius:14px;background:#ff8a24;color:#2a1d14;box-shadow:0 5px 0 #a04a08}
-button:active{transform:translateY(4px);box-shadow:0 1px 0 #a04a08}
-button.alt{background:#4a3524;color:#fff3d6;box-shadow:0 5px 0 #2a1d14}
-button.on{outline:4px solid #fff3d6}
-.row{display:flex;gap:10px}.row>*{flex:1}
-.sw{height:52px;border-radius:50%;max-width:52px;box-shadow:none!important;padding:0;border:4px solid #2a1d14}
-.sw.on{outline:4px solid #fff3d6}
-#pl div{display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:6px;background:#3c2a1d;border-radius:12px;font-size:18px}
-#pl i{width:20px;height:20px;border-radius:50%;flex:none}
-#msg{color:#ff9d8f;min-height:22px;font-size:15px}
-#hud{position:fixed;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;pointer-events:none;font-size:22px;font-weight:700;text-shadow:0 2px 0 #000a}
-#hud b{background:#0007;padding:4px 12px;border-radius:12px}
-#cd{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:110px;font-weight:700;color:#ffd24a;text-shadow:0 6px 0 #6b2d05;pointer-events:none}
-#ctl{position:fixed;inset:0}
-.hint{position:fixed;pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:34px;color:#fff;opacity:.28}
-#hl{left:0;top:0;width:50%;height:74%}#hr{right:0;top:0;width:50%;height:74%}
-#hb{left:0;bottom:0;width:70%;height:26%;background:#e5483b44;border-top:3px dashed #fff5;font-size:22px}
-#hp{right:3%;bottom:max(3%,env(safe-area-inset-bottom));width:22vw;height:22vw;max-width:110px;max-height:110px;border-radius:50%;background:#ffd24a55;border:4px solid #ffd24a;opacity:1;font-size:44px}
-#res{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(88vw,380px);background:#2a1d14ee;border:4px solid #ff8a24;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px;font-size:19px}
-#res div.r{display:flex;justify-content:space-between;padding:6px 10px;background:#3c2a1d;border-radius:10px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buggy Rush 3D</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #111;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+    }
+    #ui {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #e74c3c;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: 340px;
+      z-index: 10;
+      box-shadow: 0 0 20px rgba(231, 76, 60, 0.4);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: #222;
+      border: 1px solid #444;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #e74c3c;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover { background: #c0392b; }
+    #hud {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 5;
+      font-size: 18px;
+      font-weight: bold;
+      background: rgba(0,0,0,0.6);
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: none;
+    }
+    #boostBar {
+      width: 150px;
+      height: 12px;
+      background: #333;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    #boostFill {
+      width: 100%;
+      height: 100%;
+      background: #f39c12;
+      transition: width 0.1s;
+    }
+    .player-list { text-align: left; margin: 10px 0; max-height: 120px; overflow-y: auto; background: #1a1a1a; padding: 8px; border-radius: 6px; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-<canvas id="c" class="hide"></canvas>
 
-<div id="lobby">
-  <h1>বাগি রাশ</h1>
-  <div id="joinBox" style="display:flex;flex-direction:column;gap:12px">
-    <h2>তোমার নাম</h2>
-    <input id="nm" maxlength="12" placeholder="যেমন: রাকিব" autocomplete="off">
-    <button id="jb">খেলায় ঢোকো</button>
-  </div>
-  <div id="room" class="hide" style="display:flex;flex-direction:column;gap:12px">
-    <h2>তোমার বাগি</h2>
-    <div class="row" id="chs"></div>
-    <h2 id="cnt">খেলোয়াড়</h2>
-    <div id="pl"></div>
-    <h2>ম্যাপ</h2>
-    <div class="row" id="maps"></div>
-    <button id="sb" class="hide">রেস শুরু করো</button>
-    <h2 id="wt" class="hide">হোস্ট শুরু করার অপেক্ষায়…</h2>
-  </div>
-  <div id="msg"></div>
-</div>
+  <!-- UI Menu -->
+  <div id="ui">
+    <h2>🏎️ Buggy Rush 3D</h2>
+    <div id="join-screen">
+      <input type="text" id="nameInput" placeholder="আপনার নাম লিখুন" maxlength="12" value="Racer">
+      <select id="chSelect">
+        <option value="0">লাল বাগি (Red)</option>
+        <option value="1">নীল বাগি (Blue)</option>
+        <option value="2">সবুজ বাগি (Green)</option>
+        <option value="3">হলুদ বাগি (Yellow)</option>
+      </select>
+      <button onclick="joinGame()">লবিতে জয়েন করুন</button>
+      <div id="errMsg" style="color: #e74c3c; margin-top: 5px;"></div>
+    </div>
 
-<div id="hud" class="hide"><b id="lp"></b><b id="ps"></b><b id="it"></b></div>
-<div id="cd" class="hide"></div>
-<div id="ctl" class="hide">
-  <div class="hint" id="hl">◀</div><div class="hint" id="hr">▶</div>
-  <div class="hint" id="hb">ব্রেক</div><div class="hint" id="hp">🎁</div>
-</div>
-<div id="res" class="hide"></div>
-
-<script>
-const $=i=>document.getElementById(i),LAPS=3;
-const CH=[['লাল','#e5483b'],['নীল','#2f7de1'],['সবুজ','#2fb36b'],['হলুদ','#f2b01e']];
-const IT={m:'🚀',b:'⚡',o:'🛢️',s:'🛡️'};
-const TRK=[
- {n:'কাদা ওভাল',w:210,p:[[0,0],[500,-60],[1000,150],[1150,600],[800,950],[250,900],[-250,650],[-350,250],[-250,-100]]},
- {n:'আঁকাবাঁকা পাহাড়',w:185,p:[[0,0],[450,-100],[800,-400],[1200,-300],[1300,100],[1000,350],[1100,700],[700,950],[300,700],[0,900],[-400,800],[-500,350],[-300,100]]}
-];
-
-/* ---------- network & lobby ---------- */
-let ws,myId=0,host=0,map=0,ch=0,players=[],ingame=false;
-const tx=m=>ws&&ws.readyState==1&&ws.send(JSON.stringify(m));
-const say=t=>$('msg').textContent=t||'';
-CH.forEach((c,i)=>{const b=document.createElement('button');b.className='sw'+(i==0?' on':'');b.style.background=c[1];
- b.onclick=()=>{ch=i;tx({t:'ch',ch:i});mark()};$('chs').appendChild(b)});
-TRK.forEach((t,i)=>{const b=document.createElement('button');b.className='alt';b.textContent=t.n;b.onclick=()=>tx({t:'map',map:i});$('maps').appendChild(b)});
-$('nm').value=localStorage.getItem('br_name')||'';
-$('jb').onclick=()=>{
- const name=$('nm').value.trim()||'রেসার';try{localStorage.setItem('br_name',name)}catch{}
- say('সংযোগ হচ্ছে…');
- ws=new WebSocket((location.protocol=='https:'?'wss://':'ws://')+location.host);
- ws.onopen=()=>tx({t:'join',name,ch});
- ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch{return}on[m.t]&&on[m.t](m)};
- ws.onclose=()=>{say('সংযোগ ছিঁড়ে গেছে। পেজ রিলোড করো।')};
-};
-$('sb').onclick=()=>tx({t:'start'});
-function mark(){[...$('chs').children].forEach((b,i)=>b.classList.toggle('on',i==ch));
- [...$('maps').children].forEach((b,i)=>b.classList.toggle('on',i==map))}
-function renderLobby(){
- $('pl').innerHTML='';
- players.forEach(p=>{const d=document.createElement('div'),i=document.createElement('i'),s=document.createElement('span');
-  i.style.background=CH[p.ch][1];s.textContent=p.name+(p.id==host?' 👑':'')+(p.id==myId?' (তুমি)':'');d.append(i,s);$('pl').appendChild(d)});
- $('cnt').textContent='খেলোয়াড় '+players.length+'/6';
- const h=host==myId;$('sb').classList.toggle('hide',!h);$('wt').classList.toggle('hide',h);
- [...$('maps').children].forEach(b=>b.disabled=!h);mark();
-}
-const on={
- welcome(m){myId=m.id;say('');$('joinBox').classList.add('hide');$('room').classList.remove('hide');$('room').style.display='flex'},
- err(m){say(m.msg);if(ws)ws.close()},
- lobby(m){players=m.players;host=m.host;map=m.map;
-  const ids=players.map(p=>p.id);for(const id in O)if(!ids.includes(+id))delete O[id];
-  const mine=players.find(p=>p.id==myId);if(mine)ch=mine.ch;
-  if(m.state=='lobby'){if(ingame)endRace();renderLobby()}else if(ingame&&host==myId)showRes()},
- go:m=>startRace(m),
- snap(m){if(!ingame)return;for(const s of m.s){if(s.id==myId)continue;let o=O[s.id];if(!o)o=O[s.id]={x:s.x,y:s.y,a:s.a};
-  Object.assign(o,{tx:s.x,ty:s.y,ta:s.a,p:s.p||0,m:s.m||[],oi:s.oi||[],f:s.f|0,d:s.d||0})}}
-};
-
-/* ---------- track ---------- */
-let X,Y,A,N,path,TW,boxes,O={},me,go=false,t0=0,startT=0,uid=0,hit=new Set(),missiles=[],oils=[],fx=[];
-function build(k){
- const t=TRK[k],P=t.p,n=P.length;X=[];Y=[];TW=t.w;
- for(let i=0;i<n;i++){const a=P[(i+n-1)%n],b=P[i],c=P[(i+1)%n],d=P[(i+2)%n];
-  for(let j=0;j<20;j++){const u=j/20,u2=u*u,u3=u2*u;
-   const f=(p0,p1,p2,p3)=>.5*(2*p1+(-p0+p2)*u+(2*p0-5*p1+4*p2-p3)*u2+(-p0+3*p1-3*p2+p3)*u3);
-   X.push(f(a[0],b[0],c[0],d[0]));Y.push(f(a[1],b[1],c[1],d[1]))}}
- N=X.length;A=X.map((_,i)=>Math.atan2(Y[(i+1)%N]-Y[i],X[(i+1)%N]-X[i]));
- path=new Path2D();X.forEach((x,i)=>i?path.lineTo(x,Y[i]):path.moveTo(x,Y[i]));path.closePath();
- boxes=[];for(let k=0;k<5;k++){const i=Math.floor((k+.5)*N/5);
-  for(const off of[-55,0,55])boxes.push({x:X[i]-Math.sin(A[i])*off,y:Y[i]+Math.cos(A[i])*off,t:0})}
-}
-function near(px,py,h){let bi=h,bd=1e18;for(let k=-8;k<=30;k++){const i=(h+k+N)%N,d=(X[i]-px)**2+(Y[i]-py)**2;if(d<bd){bd=d;bi=i}}return[bi,Math.sqrt(bd)]}
-const nrm=a=>{while(a>Math.PI)a-=2*Math.PI;while(a<-Math.PI)a+=2*Math.PI;return a};
-
-/* ---------- race flow ---------- */
-function startRace(m){
- build(m.map);O={};missiles=[];oils=[];fx=[];hit.clear();
- const r=Math.max(0,m.order.indexOf(myId)),i0=(N-3-Math.floor(r/2)*3+N)%N,side=r%2?1:-1;
- me={x:X[i0]-Math.sin(A[i0])*side*48,y:Y[i0]+Math.cos(A[i0])*side*48,a:A[i0],v:0,idx:i0,lap:-1,stun:0,bt:0,sh:0,item:null,d:0};
- go=false;startT=performance.now()+3500;ingame=true;
- ['lobby','res'].forEach(i=>$(i).classList.add('hide'));
- ['c','hud','ctl','cd'].forEach(i=>$(i).classList.remove('hide'));
- resize();try{navigator.wakeLock&&navigator.wakeLock.request('screen')}catch{}
-}
-function endRace(){ingame=false;go=false;['c','hud','ctl','cd','res'].forEach(i=>$(i).classList.add('hide'));$('lobby').classList.remove('hide')}
-const nameOf=id=>(players.find(p=>p.id==id)||{name:'?'}).name;
-const colOf=id=>CH[(players.find(p=>p.id==id)||{ch:0}).ch][1];
-function rank(){
- const L=[{id:myId,d:me.d,p:me.lap*N+me.idx}];
- for(const id in O)L.push({id:+id,d:O[id].d,p:O[id].p});
- return L.sort((a,b)=>a.d&&b.d?a.d-b.d:a.d?-1:b.d?1:b.p-a.p);
-}
-function showRes(){
- const R=$('res');R.classList.remove('hide');R.innerHTML='<b style="font-size:24px">ফলাফল</b>';
- rank().forEach((r,i)=>{const d=document.createElement('div');d.className='r';
-  d.innerHTML='<span></span><span></span>';d.children[0].textContent=(i+1)+'. '+nameOf(r.id);
-  d.children[1].textContent=r.d?(r.d/1000).toFixed(1)+' সে':'…';d.children[0].style.color=colOf(r.id);R.appendChild(d)});
- const b=document.createElement('button');
- if(host==myId){b.textContent='লবিতে ফিরো';b.onclick=()=>tx({t:'reset'});R.appendChild(b)}
- else{const h=document.createElement('div');h.textContent='হোস্ট লবিতে ফিরলে তুমিও ফিরবে';h.style.fontSize='15px';R.appendChild(h)}
-}
-
-/* ---------- controls ---------- */
-const K={L:0,R:0,B:0},ptr=new Map(),ctl=$('ctl');
-const zone=(x,y)=>y>innerHeight*.74?(x<innerWidth*.7?'B':'P'):(x<innerWidth/2?'L':'R');
-const refresh=()=>{K.L=K.R=K.B=0;ptr.forEach(z=>{if(z in K)K[z]=1})};
-ctl.addEventListener('pointerdown',e=>{e.preventDefault();const z=zone(e.clientX,e.clientY);ptr.set(e.pointerId,z);if(z=='P')use();refresh()});
-ctl.addEventListener('pointermove',e=>{if(!ptr.has(e.pointerId))return;const z=zone(e.clientX,e.clientY);if(z!='P'){ptr.set(e.pointerId,z);refresh()}});
-['pointerup','pointercancel'].forEach(n=>ctl.addEventListener(n,e=>{ptr.delete(e.pointerId);refresh()}));
-const KM={ArrowLeft:'L',a:'L',ArrowRight:'R',d:'R',ArrowDown:'B',s:'B'};
-addEventListener('keydown',e=>{if(!ingame)return;if(KM[e.key])K[KM[e.key]]=1;if(e.key==' ')use()});
-addEventListener('keyup',e=>{if(KM[e.key])K[KM[e.key]]=0});
-
-/* ---------- gameplay ---------- */
-const pick=()=>'mmmbbboosss'[Math.random()*11|0];
-function use(){
- if(!ingame||!go||!me.item||me.stun>0||me.d)return;const k=me.item;me.item=null;
- if(k=='b')me.bt=2.2;
- else if(k=='s')me.sh=8;
- else if(k=='o')oils.push({id:++uid,x:me.x-Math.cos(me.a)*45,y:me.y-Math.sin(me.a)*45,life:15});
- else{let tg=0,bd=1e9;
-  for(const id in O){const o=O[id];if(o.d)continue;const dx=o.x-me.x,dy=o.y-me.y,d=Math.hypot(dx,dy);
-   if(Math.cos(Math.atan2(dy,dx)-me.a)>.2&&d<bd){bd=d;tg=+id}}
-  missiles.push({id:++uid,x:me.x+Math.cos(me.a)*30,y:me.y+Math.sin(me.a)*30,a:me.a,tg,life:4})}
-}
-function hurt(t,vk){if(me.sh>0){me.sh=0;return}me.stun=t;me.v*=vk}
-function upd(dt){
- const now=performance.now();
- for(const id in O){const o=O[id],k=Math.min(1,dt*14);o.x+=(o.tx-o.x)*k;o.y+=(o.ty-o.y)*k;o.a+=nrm(o.ta-o.a)*k}
- if(!go){const s=Math.ceil((startT-now)/1000);$('cd').textContent=s>0?s:'';if(now>=startT){go=true;t0=now;$('cd').textContent='যাও!';setTimeout(()=>{if($('cd').textContent=='যাও!')$('cd').textContent=''},800)}}
- const[i,dist]=near(me.x,me.y,me.idx),off=dist>TW/2+8;
- if(go){
-  const br=K.B&&!me.d,st=me.d?0:(K.R-K.L);
-  const top=me.d?120:me.bt>0?650:off?190:410;
-  if(me.stun>0){me.stun-=dt;me.a+=11*dt;me.v*=Math.pow(.05,dt)}
-  else{
-   if(br)me.v=Math.max(0,me.v-520*dt);
-   else if(me.v<top)me.v=Math.min(top,me.v+(me.bt>0?520:170)*dt);
-   else me.v=Math.max(top,me.v-320*dt);
-   me.a+=st*2.7*dt*(.4+.6*Math.min(1,me.v/260))*(br?1.25:1);
-  }
-  me.bt-=dt;me.sh-=dt;
-  me.x+=Math.cos(me.a)*me.v*dt;me.y+=Math.sin(me.a)*me.v*dt;
-  if(dist>TW/2+70){const k=(dist-TW/2-70)/dist;me.x-=(me.x-X[i])*k;me.y-=(me.y-Y[i])*k;me.v*=.9}
-  for(const id in O){const o=O[id],dx=me.x-o.x,dy=me.y-o.y,d=Math.hypot(dx,dy);
-   if(d<30&&d>0){me.x+=dx/d*(30-d)*.6;me.y+=dy/d*(30-d)*.6;me.v*=.985}}
-  if(i-me.idx<-N/2)me.lap++;else if(i-me.idx>N/2)me.lap--;
-  me.idx=i;
-  if(me.lap>=LAPS&&!me.d){me.d=Math.round(now-t0);showRes()}
-  for(const b of boxes){if(b.t>0)b.t-=dt;else if(!me.item&&!me.d&&Math.hypot(b.x-me.x,b.y-me.y)<36){me.item=pick();b.t=3}}
-  for(const id in O){const o=O[id];
-   for(const m of o.m){const k=id+'m'+m[0];if(!hit.has(k)&&Math.hypot(m[1]-me.x,m[2]-me.y)<42){hit.add(k);hurt(1.3,.15);fx.push({x:me.x,y:me.y,t:.5})}}
-   for(const m of o.oi){const k=id+'o'+m[0];if(!hit.has(k)&&Math.hypot(m[1]-me.x,m[2]-me.y)<30){hit.add(k);hurt(.9,.5)}}}
- }
- for(let j=missiles.length-1;j>=0;j--){const m=missiles[j],o=O[m.tg];m.life-=dt;
-  if(o){m.a+=Math.max(-3.2*dt,Math.min(3.2*dt,nrm(Math.atan2(o.y-m.y,o.x-m.x)-m.a)))}
-  m.x+=Math.cos(m.a)*720*dt;m.y+=Math.sin(m.a)*720*dt;
-  if(m.life<=0||(o&&Math.hypot(o.x-m.x,o.y-m.y)<30)){if(o)fx.push({x:m.x,y:m.y,t:.5});missiles.splice(j,1)}}
- for(let j=oils.length-1;j>=0;j--)if((oils[j].life-=dt)<=0)oils.splice(j,1);
- for(let j=fx.length-1;j>=0;j--)if((fx[j].t-=dt)<=0)fx.splice(j,1);
- const r=rank();
- $('lp').textContent='🏁 '+Math.min(LAPS,Math.max(1,me.lap+1))+'/'+LAPS;
- $('ps').textContent='#'+(r.findIndex(q=>q.id==myId)+1)+'/'+r.length;
- $('it').textContent=me.item?IT[me.item]:'—';
- $('hp').textContent=me.item?IT[me.item]:'🎁';
- if(me.d&&!$('res').classList.contains('hide')&&now%500<20)showRes();
-}
-function send(){
- const r2=v=>Math.round(v*100)/100;
- tx({t:'s',s:{x:r2(me.x),y:r2(me.y),a:r2(me.a),v:Math.round(me.v),p:me.lap*N+me.idx,
-  m:missiles.map(m=>[m.id,m.x|0,m.y|0]),oi:oils.map(o=>[o.id,o.x|0,o.y|0]),
-  f:(me.sh>0?1:0)|(me.bt>0?2:0),d:me.d}});
-}
-
-/* ---------- drawing ---------- */
-const cv=$('c'),x=cv.getContext('2d');
-function resize(){const r=devicePixelRatio||1;cv.width=innerWidth*r;cv.height=innerHeight*r}
-addEventListener('resize',resize);
-function car(px,py,a,col,nm,sh,bt,stun){
- x.save();x.translate(px,py);x.rotate(a);
- if(bt){x.fillStyle='#ffb02e';x.beginPath();x.moveTo(-18,-6);x.lineTo(-44-Math.random()*14,0);x.lineTo(-18,6);x.fill()}
- x.fillStyle='#111';[[-12,-13],[-12,8],[9,-13],[9,8]].forEach(w=>x.fillRect(w[0],w[1],9,6));
- x.fillStyle=col;x.beginPath();x.roundRect(-17,-9,34,18,6);x.fill();
- x.fillStyle='#fff8';x.beginPath();x.roundRect(-2,-6,10,12,3);x.fill();
- x.fillStyle='#0004';x.fillRect(12,-7,4,14);
- if(sh>0){x.strokeStyle='#6fe3ff';x.lineWidth=4;x.beginPath();x.arc(0,0,27,0,7);x.stroke()}
- x.restore();
- x.fillStyle='#fff';x.font='bold 15px sans-serif';x.textAlign='center';x.fillText(nm,px,py-26);
-}
-function draw(){
- const w=cv.width,h=cv.height,s=Math.min(w,h)/520;
- x.setTransform(1,0,0,1,0,0);x.fillStyle='#5a8a3a';x.fillRect(0,0,w,h);
- x.setTransform(s,0,0,s,w/2-me.x*s,h/2-me.y*s);
- const vw=w/s/2+160,vh=h/s/2+160;
- x.fillStyle='#4c7a30';
- for(let gx=Math.floor((me.x-vw)/90);gx<(me.x+vw)/90;gx++)for(let gy=Math.floor((me.y-vh)/90);gy<(me.y+vh)/90;gy++){
-  const q=Math.sin(gx*12.9898+gy*78.233)*43758.5453,f=q-Math.floor(q);
-  x.beginPath();x.arc(gx*90+f*70,gy*90+((f*97)%1)*70,5+f*6,0,7);x.fill()}
- x.lineJoin='round';x.lineCap='round';
- x.strokeStyle='#3b2a1a';x.lineWidth=TW+34;x.stroke(path);
- x.strokeStyle='#d8bf86';x.lineWidth=TW+16;x.stroke(path);
- x.strokeStyle='#55545c';x.lineWidth=TW;x.stroke(path);
- x.strokeStyle='#ffffff55';x.lineWidth=4;x.setLineDash([26,30]);x.stroke(path);x.setLineDash([]);
- x.save();x.translate(X[0],Y[0]);x.rotate(A[0]);x.fillStyle='#fff';x.fillRect(-8,-TW/2,16,TW);
- x.fillStyle='#111';for(let k=0;k<TW/16;k++)x.fillRect(k%2?0:-8,-TW/2+k*16,8,16);x.restore();
- for(const o of oils){x.fillStyle='#111c';x.beginPath();x.ellipse(o.x,o.y,24,17,0,0,7);x.fill()}
- for(const id in O){const o=O[id];for(const m of o.oi){x.fillStyle='#111c';x.beginPath();x.ellipse(m[1],m[2],24,17,0,0,7);x.fill()}}
- for(const b of boxes)if(b.t<=0){x.fillStyle='#ffd24a';x.strokeStyle='#8a5a00';x.lineWidth=3;x.beginPath();x.roundRect(b.x-15,b.y-15,30,30,7);x.fill();x.stroke();
-  x.fillStyle='#8a5a00';x.font='bold 22px sans-serif';x.textAlign='center';x.fillText('?',b.x,b.y+8)}
- for(const id in O){const o=O[id];car(o.x,o.y,o.a,colOf(+id),nameOf(+id),o.f&1,o.f&2)}
- car(me.x,me.y,me.a,colOf(myId),'',me.sh>0,me.bt>0);
- x.font='30px sans-serif';x.textAlign='center';
- const rock=(px,py,a)=>{x.save();x.translate(px,py);x.rotate(a);x.fillText('🚀',0,10);x.restore()};
- for(const m of missiles)rock(m.x,m.y,m.a+Math.PI/4);
- for(const id in O)for(const m of O[id].m)rock(m[1],m[2],Math.PI/4);
- for(const f of fx){x.fillText('💥',f.x,f.y+10)}
-}
-let last=performance.now(),acc=0;
-(function loop(t){
- const dt=Math.min(.05,(t-last)/1000);last=t;
- if(ingame&&me){upd(dt);acc+=dt;if(acc>=.05){acc=0;send()}draw()}
- requestAnimationFrame(loop);
-})(last);
-</script>
-</body>
-</html>
+    <div id="lobby-screen" style="display:none;">
+      <h3>লবি (Lobby)</h3>
+      <div class="player-list" id="playerList">খেলোয়াড়ের অপেক্ষায়...</div>
+      <div id="hostControls" style="display:none;">
+        <button onclick="
